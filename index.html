@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Image</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+   
+    
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  
+    <script src="assets/cropperjs/dist/cropper.js"></script>
+    <link  href="assets/cropperjs/dist/cropper.css" rel="stylesheet">
+    <script src="assets/jquery-cropper/dist/jquery-cropper.js"></script>
+</head>
+<body>
+    <div class="full-viewport d-flex justify-content-center align-items-center">
+        <div>
+            
+            <div id="input-module" class="border">
+                <input class="border" type="file" data-ratio="16:9" data-dimensions="w500:h930" id="fileInput" accept="image/*" />
+            </div>
+
+
+            <div id="canvas-module" class="text-center" style="display: none;">
+              <canvas id="canvas">
+                Your browser does not support the HTML5 canvas element.
+              </canvas>
+              <br>
+              <button class="btn btn-primary w-50" id="btnCrop" value="Crop">CROP</button>
+            </div>		
+            
+           <div id="result-module" class="border" style="display: none;">
+                <div id="result" class="d-flex justify-content-center align-items-center"></div>
+                <div>
+                    <button class="btn btn-danger w-50 float-start" id="btnRestore">RESET</button>
+                    <button class="btn btn-success w-50 float-start" id="btnDone">DONE</button>
+                </div>
+           </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
