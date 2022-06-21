@@ -4,7 +4,8 @@ var canvas  = $("#canvas"),
 
 var croppedImageDataURL = '';
 
-$('#fileInput').on( 'change', function(){
+$('.file-input').on( 'change', function(){
+  let fileInput = $(this);
     if (this.files && this.files[0]) {
       if ( this.files[0].type.match(/^image\//) ) {
 
@@ -14,23 +15,32 @@ $('#fileInput').on( 'change', function(){
            var img = new Image();
            img.onload = function() {
             
-             context.canvas.height = img.height;
-             context.canvas.width  = img.width;
-             context.drawImage(img, 0, 0);
+            context.canvas.height = img.height;
+            context.canvas.width  = img.width;
+            context.drawImage(img, 0, 0);
+            let cropperOptions = {}
+             if(fileInput.data('ratio'))
+             {
+               let ratio = fileInput.data('ratio').split(':')
+               cropperOptions = { aspectRatio: ratio[0] / ratio[1]}
+             }
 
-             let ratio = $('#fileInput').data('ratio').split(':')
-             let dimensions = $('#fileInput').data('dimensions').split(':')
-             let dWidth = parseInt(dimensions[0].replace('w',''))
-             let dHeight = parseInt(dimensions[1].replace('h',''))
+             if (fileInput.data('dimensions')) 
+             {
+              let dimensions = fileInput.data('dimensions').split(':')
+              let dWidth = parseInt(dimensions[0].replace('w',''))
+              let dHeight = parseInt(dimensions[1].replace('h',''))
+              cropperOptions = { data:{ 
+                width: dWidth,
+                height: dHeight,
+            }}
 
-             var cropper = canvas.cropper({
-                // autoCrop : true,
-                aspectRatio: ratio[0] / ratio[1],
-                data:{ 
-                    width: dWidth,
-                    height: dHeight,
-                },
-             });
+             }
+            
+
+            
+
+             var cropper = canvas.cropper(cropperOptions);
 
              executeViewForStage('PROCESS')
 
@@ -38,7 +48,7 @@ $('#fileInput').on( 'change', function(){
 
                 croppedImageDataURL = canvas.cropper('getCroppedCanvas').toDataURL("image/png"); 
                 
-                result.append( $('<img>').attr('src', croppedImageDataURL) );
+                result.html( $('<img>').attr('src', croppedImageDataURL) );
                 
                 executeViewForStage('VIEW')
 
@@ -47,24 +57,14 @@ $('#fileInput').on( 'change', function(){
 
 
              $('#btnRestore').click(function() {
-               canvas.cropper({
-                // autoCrop : true,
-                aspectRatio: ratio[0] / ratio[1],
-                data:{ 
-                    width: dWidth,
-                    height: dHeight,
-                },
-             });
+               canvas.cropper(cropperOptions);
                result.empty();
                executeViewForStage('PROCESS')
              });
 
              $('#btnDone').click(function() {
-                canvas.cropper('reset');
-
-                result.empty();
-
-                let fileName = 'Cropped_'+$('#fileInput').val().split('\\').pop();
+               
+                let fileName = 'Cropped_'+fileInput.val().split('\\').pop();
                 
                 var block = croppedImageDataURL.split(";");
                 
@@ -75,9 +75,14 @@ $('#fileInput').on( 'change', function(){
                 let file = new File([base64toBlob(realData,contentType)], fileName ,{type:contentType, lastModified:new Date().getTime()});
         
                 let container = new DataTransfer();
+
                 container.items.add(file);
                 
-                $('#fileInput').prop('files',container.files)
+                fileInput.prop('files',container.files)
+
+                canvas.cropper("destroy")
+
+                result.empty();
 
                 executeViewForStage('FINISH')
 
