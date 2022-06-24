@@ -22,7 +22,12 @@ $('.file-input').on( 'change', function(){
              if(fileInput.data('ratio'))
              {
                let ratio = fileInput.data('ratio').split(':')
-               cropperOptions = { aspectRatio: ratio[0] / ratio[1]}
+                cropperOptions = { 
+                aspectRatio: ratio[0] / ratio[1],
+                strict: true,
+                // cropBoxMovable: true,
+                // cropBoxResizable: false,
+              }
              }
 
              if (fileInput.data('dimensions')) 
@@ -33,6 +38,8 @@ $('.file-input').on( 'change', function(){
               cropperOptions = { data:{ 
                 width: dWidth,
                 height: dHeight,
+                cropBoxMovable: true,
+                cropBoxResizable: false,
             }}
 
              }
@@ -41,6 +48,10 @@ $('.file-input').on( 'change', function(){
             
 
              var cropper = canvas.cropper(cropperOptions);
+
+            //  cropper.on('cropmove',function(){
+            //   $(this).getData();
+            //  });
 
              executeViewForStage('PROCESS')
 
@@ -79,6 +90,8 @@ $('.file-input').on( 'change', function(){
                 container.items.add(file);
                 
                 fileInput.prop('files',container.files)
+
+                // saveImage(container.files[0]);
 
                 canvas.cropper("destroy")
 
@@ -149,3 +162,22 @@ function base64toBlob(base64Data, contentType) {
     }
     return new Blob(byteArrays, { type: contentType });
 }
+
+
+
+// function saveImage(file)
+// {    
+// 	let formData = new FormData();
+// 	formData.append('file',file)
+// 	$.ajax({ 
+// 		type: "POST", 
+// 		url: 'http://localhost/frameover/server/store.php',
+// 		cache: false,
+//     	contentType: false,
+//     	processData: false,
+// 		data: formData
+// 	}).then((response) => {
+// 		console.log(response);
+// 	});
+// }  
+  
