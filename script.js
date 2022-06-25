@@ -35,12 +35,12 @@ $('.file-input').on( 'change', function(){
               let dimensions = fileInput.data('dimensions').split(':')
               let dWidth = parseInt(dimensions[0].replace('w',''))
               let dHeight = parseInt(dimensions[1].replace('h',''))
-              cropperOptions = { data:{ 
-                width: dWidth,
-                height: dHeight,
-                cropBoxMovable: true,
-                cropBoxResizable: false,
-            }}
+              cropperOptions = {
+                  width: dWidth,
+                  height: dHeight,
+                  cropBoxMovable: true,
+                  cropBoxResizable: false,
+              }
 
              }
             
